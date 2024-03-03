@@ -2,7 +2,7 @@
 #include <stdio.h>
 
 #define V 4
-#define INF 99999
+#define INF INT_MAX
 
 void printSolution(int dist[][V]) {
     printf("Shortest distances between every pair of vertices:\n");
