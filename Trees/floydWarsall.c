@@ -1,55 +1,50 @@
+// Floyd-Warshall Algorithm in C
 
 #include <stdio.h>
 
-#define V 4
-#define INF INT_MAX
+// defining the number of vertices
+#define nV 4
 
-void printSolution(int dist[][V]) {
-    printf("Shortest distances between every pair of vertices:\n");
-    for (int i = 0; i < V; i++) {
-        for (int j = 0; j < V; j++) {
-            if (dist[i][j] == INF) {
-                printf("INF\t");
-            } else {
-                printf("%d\t", dist[i][j]);
-            }
-        }
-        printf("\n");
+#define INF 999
+
+void printMatrix(int matrix[][nV]);
+
+// Implementing floyd warshall algorithm
+void floydWarshall(int graph[][nV]) {
+  int matrix[nV][nV], i, j, k;
+
+  for (i = 0; i < nV; i++)
+    for (j = 0; j < nV; j++)
+      matrix[i][j] = graph[i][j];
+
+  // Adding vertices individually
+  for (k = 0; k < nV; k++) {
+    for (i = 0; i < nV; i++) {
+      for (j = 0; j < nV; j++) {
+        if (matrix[i][k] + matrix[k][j] < matrix[i][j])
+          matrix[i][j] = matrix[i][k] + matrix[k][j];
+      }
     }
+  }
+  printMatrix(matrix);
 }
 
-void floydWarshall(int graph[][V]) {
-    int dist[V][V];
-
-    for (int i = 0; i < V; i++) {
-        for (int j = 0; j < V; j++) {
-            dist[i][j] = graph[i][j];
-        }
+void printMatrix(int matrix[][nV]) {
+  for (int i = 0; i < nV; i++) {
+    for (int j = 0; j < nV; j++) {
+      if (matrix[i][j] == INF)
+        printf("%4s", "INF");
+      else
+        printf("%4d", matrix[i][j]);
     }
-
-    for (int k = 0; k < V; k++) {
-        for (int i = 0; i < V; i++) {
-            for (int j = 0; j < V; j++) {
-                if (dist[i][k] + dist[k][j] < dist[i][j]) {
-                    dist[i][j] = dist[i][k] + dist[k][j];
-                }
-            }
-        }
-    }
-
-    printSolution(dist);
+    printf("\n");
+  }
 }
 
 int main() {
-    int graph[V][V] = {
-        {0, 15, INF, 17},
-        {INF, 0, 23, INF},
-        {INF, INF, 0, 1},
-        {INF, INF, INF, 12}
-    };
-
-    printf("Floyd's Algorithm:\n");
-    floydWarshall(graph);
-
-    return 0;
+  int graph[nV][nV] = {{0, 3, INF, 5},
+             {2, 0, INF, 4},
+             {INF, 1, 0, INF},
+             {INF, INF, 2, 0}};
+  floydWarshall(graph);
 }
